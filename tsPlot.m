@@ -1,12 +1,14 @@
 function [hIsopycs, hTS] = tsPlot(SA, CT, plotData, numIsopycs, colContour)
 %tsPlot Plot density contours for temperature and salinity data
 %   INPUTS:
-%       SA (required): Absolute Salinity from gsw_SA_from_SP [Nx1 or MxN]
-%       CT (required): Conservative Temperature from gsw_CT_from_t [Nx1 or MxN]
+%       SA (required): Absolute Salinity range or data from gsw_SA_from_SP 
+%           [Nx1 or MxN]
+%       CT (required): Conservative Temperature range or data from 
+%           gsw_CT_from_t [Nx1 or MxN]
 %       plotData: 0 to only plot density contours (default is 1)
-%       numIsopycs: number of isopycnals to plot (scalar)
+%       numIsopycs: number of isopycnals to plot (scalar; default is 10)
 %       colContour: color for contour lines/labels (may be 1x3 or matlab
-%          color string, e.g. 'k', 'b')
+%          color string; default is 'k')
 %
 %   OUTPUTS:
 %       hIsopycs, hTS: handles for density contours and T-S data,
@@ -18,21 +20,10 @@ if size(SA) ~= size(CT)
     error('Error: SA and CT must have the same dimensions.')
 end
 
-if nargin == 2
-    plotData = 1;
-    numIsopycs = 10;
-    colContour = 'k';
-elseif nargin == 3
-    numIsopycs = 10;
-    colContour = 'k';
-elseif nargin == 4
-    colContour = 'k';
-end
-
-if sum(size(SA)>1)>1
-    SA = SA(:);
-    CT = CT(:);
-end
+%% defaults and plot settings
+pD_def = 1;
+nI_def = 10;
+cC_def = 'k';
 
 % plot settings: contour lines
 lwContour = 1;
@@ -44,6 +35,23 @@ scatSize = 20;
 % plot settings: axis labels
 labelSA = 'Absolute Salinity [g/kg]';
 labelCT = ['Conservative Temperature [' char(176) 'C]'];
+
+%% function
+if nargin == 2
+    plotData = pD_def;
+    numIsopycs = nI_def;
+    colContour = cC_def;
+elseif nargin == 3
+    numIsopycs = nI_def;
+    colContour = cC_def;
+elseif nargin == 4
+    colContour = cC_def;
+end
+
+if sum(size(SA)>1)>1
+    SA = SA(:);
+    CT = CT(:);
+end
 
 % calculate densities for data range
 sigmaAll = gsw_sigma0(SA, CT);
