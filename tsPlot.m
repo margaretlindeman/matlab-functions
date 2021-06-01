@@ -11,7 +11,7 @@ function [hIsopycs, hTS] = tsPlot(SA, CT, plotData, numIsopycs, colContour)
 %          color string; default is 'k')
 %
 %   OUTPUTS:
-%       hIsopycs, hTS: handles for density contours and T-S data,
+%       hIsopycs, hTS: handles for density contours and T-S data scatter,
 %          respectively
 % 
 % (mrl, 01 june 2021)
