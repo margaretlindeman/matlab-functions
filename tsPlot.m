@@ -33,17 +33,18 @@ nI_def = 10;
 cC_def = 'k';
 
 % plot settings: contour lines
-lwContour = 1;
+sigmaRound = 0.25; % round densities to nearest ___
+lwContour = 1; % contour line width
 
 % plot settings: T-S data
 colData = [0, 0.447, 0.741]; % matlab default blue
-scatSize = 20;
+scatSize = 20; % data scatter size
 
 % plot settings: axis labels
 labelSA = 'Absolute Salinity [g/kg]';
 labelCT = ['Conservative Temperature [' char(176) 'C]'];
 
-%% function
+%% setup
 if nargin == 2
     plotData = pD_def;
     numIsopycs = nI_def;
@@ -60,13 +61,16 @@ if sum(size(SA)>1)>1
     CT = CT(:);
 end
 
+%% calculations
+
 % calculate densities for data range
 sigmaAll = gsw_sigma0(SA, CT);
-sigmaBounds = [round(min(sigmaAll)*4)/4, round(max(sigmaAll)*4/4)];
+sigmaBounds = [round(min(sigmaAll)/sigmaRound)*sigmaRound,...
+    round(max(sigmaAll)/sigmaRound)*sigmaRound];
 
 % define isopycnal contour values
 sigmaRange = sigmaBounds(2)-sigmaBounds(1);
-sigmaDelta = round(sigmaRange/numIsopycs*4)/4; % round to nearest 0.25
+sigmaDelta = round(sigmaRange/numIsopycs/sigmaRound)*sigmaRound;
 
 vIsopycs = sigmaBounds(1):sigmaDelta:sigmaBounds(2);
 
@@ -76,6 +80,9 @@ gridCT = linspace(min(CT),max(CT));
 
 [X, Y] = meshgrid(gridSA, gridCT);
 gridSigma = gsw_sigma0(X, Y);
+
+
+%% plotting
 
 % plot density contours
 [C, hIsopycs] = contour(X, Y, gridSigma, vIsopycs,'color',colContour,...
@@ -91,6 +98,7 @@ else
     hTS = NaN;
 end
 
+% add axis labels
 xlabel(labelSA)
 ylabel(labelCT)
 
