@@ -14,7 +14,14 @@ function [hIsopycs, hTS] = tsPlot(SA, CT, plotData, numIsopycs, colContour)
 %       hIsopycs, hTS: handles for density contours and T-S data scatter,
 %          respectively
 % 
-% (mrl, 01 june 2021)
+% dependencies: Gibbs-SeaWater (GSW) Oceanographic Toolbox
+%       http://www.teos-10.org/software.htm#1
+%
+% (margaret lindeman 01 june 2021)
+
+if ~exist('gsw_sigma0')
+    error('Error: Add GSW toolbox to path. See doc for more info.')
+end
 
 if size(SA) ~= size(CT)
     error('Error: SA and CT must have the same dimensions.')
