@@ -72,6 +72,10 @@ sigmaBounds = [round(min(sigmaAll)/sigmaRound)*sigmaRound,...
 sigmaRange = sigmaBounds(2)-sigmaBounds(1);
 sigmaDelta = round(sigmaRange/numIsopycs/sigmaRound)*sigmaRound;
 
+if sigmaDelta == 0
+    sigmaDelta = sigmaRound;
+end
+
 vIsopycs = sigmaBounds(1):sigmaDelta:sigmaBounds(2);
 
 % create grid of SA, CT, sigma
